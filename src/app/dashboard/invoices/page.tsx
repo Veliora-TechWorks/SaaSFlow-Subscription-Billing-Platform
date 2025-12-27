@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Download, Eye } from "lucide-react"
+import { useCurrencyStore } from "@/store/currency-store"
 
 const invoices = [
   { id: "INV-001", customer: "Acme Corp", amount: 299, status: "paid", date: "2024-11-15", dueDate: "2024-11-30" },
@@ -13,6 +14,8 @@ const invoices = [
 ]
 
 export default function InvoicesPage() {
+  const { formatPrice } = useCurrencyStore()
+  
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -33,7 +36,7 @@ export default function InvoicesPage() {
                   <p className="text-sm text-muted-foreground">{invoice.customer}</p>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <span className="font-medium">${invoice.amount}</span>
+                  <span className="font-medium">{formatPrice(invoice.amount)}</span>
                   <Badge variant={
                     invoice.status === "paid" ? "success" : 
                     invoice.status === "pending" ? "secondary" : "destructive"

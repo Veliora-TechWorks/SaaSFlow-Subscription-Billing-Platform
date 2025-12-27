@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useCurrencyStore } from "@/store/currency-store"
 
 const features = [
   {
@@ -31,7 +32,7 @@ const features = [
 ]
 
 const stats = [
-  { label: "Revenue Processed", value: "$2.4B+", icon: DollarSign },
+  { label: "Revenue Processed", value: "$1B+", icon: DollarSign },
   { label: "Active Subscriptions", value: "500K+", icon: Users },
   { label: "Countries Supported", value: "180+", icon: BarChart3 },
   { label: "Uptime SLA", value: "99.99%", icon: CheckCircle }
@@ -81,6 +82,15 @@ const pricingPlans = [
 ]
 
 export default function LandingPage() {
+  const { formatPrice } = useCurrencyStore()
+  
+  const statsWithCurrency = [
+    { label: "Revenue Processed", value: formatPrice(12000) + "+", icon: DollarSign },
+    { label: "Active Subscriptions", value: "500K+", icon: Users },
+    { label: "Countries Supported", value: "180+", icon: BarChart3 },
+    { label: "Uptime SLA", value: "99.99%", icon: CheckCircle }
+  ]
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -135,7 +145,7 @@ export default function LandingPage() {
       <section className="py-16 border-y bg-muted/50">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
+            {statsWithCurrency.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
@@ -279,7 +289,7 @@ export default function LandingPage() {
                     <CardTitle className="text-xl">{plan.name}</CardTitle>
                     <CardDescription>{plan.description}</CardDescription>
                     <div className="mt-4">
-                      <span className="text-3xl font-bold">${plan.price}</span>
+                      <span className="text-3xl font-bold">{formatPrice(plan.price)}</span>
                       <span className="text-muted-foreground">/month</span>
                     </div>
                   </CardHeader>

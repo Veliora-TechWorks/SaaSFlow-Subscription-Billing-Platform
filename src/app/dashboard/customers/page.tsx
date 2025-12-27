@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useCurrencyStore } from "@/store/currency-store"
 
 const customers = [
   { id: 1, name: "Acme Corp", email: "admin@acme.com", plan: "Enterprise", status: "active", mrr: 299 },
@@ -10,6 +11,8 @@ const customers = [
 ]
 
 export default function CustomersPage() {
+  const { formatPrice } = useCurrencyStore()
+  
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Customers</h1>
@@ -30,7 +33,7 @@ export default function CustomersPage() {
                   <Badge variant={customer.status === "active" ? "success" : "secondary"}>
                     {customer.status}
                   </Badge>
-                  <span className="font-medium">${customer.mrr}/mo</span>
+                  <span className="font-medium">{formatPrice(customer.mrr)}/mo</span>
                 </div>
               </div>
             ))}

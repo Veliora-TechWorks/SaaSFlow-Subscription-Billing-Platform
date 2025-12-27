@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Header } from "@/components/layout/header"
+import { useCurrencyStore } from "@/store/currency-store"
 import { api } from "@/lib/api"
 import { formatCurrency } from "@/lib/utils"
 
@@ -24,6 +24,7 @@ const planIcons = {
 
 export default function PricingPage() {
   const [selectedInterval, setSelectedInterval] = useState("month")
+  const { formatPrice } = useCurrencyStore()
   
   const { data: plans, isLoading } = useQuery({
     queryKey: ['plans'],
@@ -32,7 +33,7 @@ export default function PricingPage() {
 
   const calculatePrice = (basePrice: number) => {
     if (selectedInterval === "year") {
-      return basePrice * 12 * 0.8 // 20% discount for yearly
+      return basePrice * 12 * 0.8
     }
     return basePrice
   }
@@ -40,7 +41,6 @@ export default function PricingPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <Header />
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-ai-primary"></div>
         </div>
@@ -123,7 +123,7 @@ export default function PricingPage() {
                     <div className="mt-4">
                       <div className="flex items-baseline justify-center">
                         <span className="text-4xl font-bold">
-                          {formatCurrency(price, plan.currency)}
+                          {formatPrice(price)}
                         </span>
                         <span className="text-muted-foreground ml-1">
                           /{selectedInterval === "year" ? "year" : "month"}
@@ -131,7 +131,7 @@ export default function PricingPage() {
                       </div>
                       {selectedInterval === "year" && (
                         <p className="text-sm text-green-600 mt-1">
-                          Save {formatCurrency(plan.price * 12 * 0.2, plan.currency)} annually
+                          Save {formatPrice(plan.price * 12 * 0.2)} annually
                         </p>
                       )}
                     </div>

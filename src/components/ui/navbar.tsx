@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { Zap, Menu, X, LogOut, User } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { CurrencySelector } from "@/components/ui/currency-selector"
 import { useAppStore } from "@/store/app-store"
 import { cn } from "@/lib/utils"
 
@@ -51,6 +52,7 @@ export function Navbar() {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center space-x-4">
+          <CurrencySelector />
           {user ? (
             <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm" asChild>

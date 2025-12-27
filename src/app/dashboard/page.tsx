@@ -8,10 +8,12 @@ import { MetricCard } from "@/components/ui/metric-card"
 import { AIInsightCard } from "@/components/ui/ai-insight-card"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAppStore } from "@/store/app-store"
+import { useCurrencyStore } from "@/store/currency-store"
 import { api } from "@/lib/api"
 
 export default function DashboardPage() {
   const { dashboardData, setDashboardData, setLoading } = useAppStore()
+  const { formatPrice } = useCurrencyStore()
   
   const { data, isLoading } = useQuery({
     queryKey: ['dashboard'],
@@ -58,6 +60,7 @@ export default function DashboardPage() {
             <MetricCard 
               metric={metric} 
               currency={metric.name.toLowerCase().includes('revenue') || metric.name.toLowerCase().includes('value')}
+              formatPrice={formatPrice}
             />
           </motion.div>
         ))}
@@ -70,7 +73,7 @@ export default function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card>
+          <Card className="bg-gradient-to-br from-background to-muted/30">
             <CardHeader>
               <CardTitle>Subscription Growth</CardTitle>
               <CardDescription>Monthly recurring revenue trend</CardDescription>
@@ -78,16 +81,24 @@ export default function DashboardPage() {
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={dashboardData.subscriptionGrowth}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                    }}
+                  />
                   <Line 
                     type="monotone" 
                     dataKey="value" 
                     stroke="#6366f1" 
-                    strokeWidth={2}
-                    dot={{ fill: '#6366f1' }}
+                    strokeWidth={3}
+                    dot={{ fill: '#6366f1', strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6, stroke: '#6366f1', strokeWidth: 2 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -100,7 +111,7 @@ export default function DashboardPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card>
+          <Card className="bg-gradient-to-br from-background to-muted/30">
             <CardHeader>
               <CardTitle>Revenue by Plan</CardTitle>
               <CardDescription>Distribution across subscription tiers</CardDescription>
@@ -112,11 +123,18 @@ export default function DashboardPage() {
                   { name: 'Professional', value: 67200 },
                   { name: 'Enterprise', value: 28800 }
                 ]}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#8b5cf6" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                    }}
+                  />
+                  <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -170,7 +188,7 @@ export default function DashboardPage() {
                     <p className="text-sm text-muted-foreground">{activity.customer}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">{activity.amount}</p>
+                    <p className="font-medium">{activity.amount.includes('$') ? formatPrice(parseInt(activity.amount.replace(/[^0-9]/g, ''))) + '/month' : activity.amount}</p>
                     <p className="text-sm text-muted-foreground">{activity.time}</p>
                   </div>
                 </div>

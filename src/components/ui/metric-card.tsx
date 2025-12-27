@@ -10,9 +10,10 @@ interface MetricCardProps {
   metric: Metric
   className?: string
   currency?: boolean
+  formatPrice?: (price: number) => string
 }
 
-export function MetricCard({ metric, className, currency = false }: MetricCardProps) {
+export function MetricCard({ metric, className, currency = false, formatPrice }: MetricCardProps) {
   const isPositive = metric.changeType === "increase"
   const TrendIcon = isPositive ? TrendingUp : TrendingDown
   
@@ -23,7 +24,7 @@ export function MetricCard({ metric, className, currency = false }: MetricCardPr
       transition={{ duration: 0.2 }}
       whileHover={{ scale: 1.02 }}
     >
-      <Card className={cn("ai-glow hover:shadow-lg transition-all duration-300", className)}>
+      <Card className={cn("ai-glow hover:shadow-xl transition-all duration-300 border-l-4 border-l-ai-primary/20 bg-gradient-to-br from-background to-muted/20", className)}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             {metric.name}
@@ -38,7 +39,7 @@ export function MetricCard({ metric, className, currency = false }: MetricCardPr
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {currency ? formatCurrency(metric.value) : formatNumber(metric.value)}
+            {currency && formatPrice ? formatPrice(metric.value) : currency ? formatCurrency(metric.value) : formatNumber(metric.value)}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             {metric.period}

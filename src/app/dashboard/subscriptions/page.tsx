@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { useCurrencyStore } from "@/store/currency-store"
 
 const subscriptions = [
   { id: 1, customer: "Acme Corp", plan: "Enterprise", status: "active", amount: 299, nextBilling: "2024-12-15" },
@@ -12,6 +13,8 @@ const subscriptions = [
 ]
 
 export default function SubscriptionsPage() {
+  const { formatPrice } = useCurrencyStore()
+  
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -38,7 +41,7 @@ export default function SubscriptionsPage() {
                   }>
                     {sub.status}
                   </Badge>
-                  <span className="font-medium">${sub.amount}/mo</span>
+                  <span className="font-medium">{formatPrice(sub.amount)}/mo</span>
                   <span className="text-sm text-muted-foreground">{sub.nextBilling}</span>
                   <Button variant="outline" size="sm">Manage</Button>
                 </div>
