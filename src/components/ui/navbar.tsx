@@ -6,6 +6,7 @@ import { Zap, Menu, X, LogOut, User } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CurrencySelector } from "@/components/ui/currency-selector"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { useAppStore } from "@/store/app-store"
 import { cn } from "@/lib/utils"
 
@@ -52,6 +53,7 @@ export function Navbar() {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center space-x-4">
+          <ThemeToggle />
           <CurrencySelector />
           {user ? (
             <div className="flex items-center space-x-2">

@@ -145,7 +145,7 @@ export default function LandingPage() {
       <section className="py-16 border-y bg-muted/50">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {statsWithCurrency.map((stat, index) => (
+            {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
